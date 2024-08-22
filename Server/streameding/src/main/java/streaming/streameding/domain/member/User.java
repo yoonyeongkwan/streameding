@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import streaming.streameding.domain.content.Content;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +18,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -28,17 +30,31 @@ public class User {
     private String nickname;
     private String profileImageUrl;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Content> contents;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Content> contents = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_follow",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "follower_id")
     )
-    private Set<User> followers;
-
-    @ManyToMany(mappedBy = "followers")
-    private Set<User> following;
+    private List<User> followers = new ArrayList<>();
+    /**
+     * 사용자를 팔로우하는 다른 사용자들 (팔로워들).
+     *
+     * Many-to-Many 관계를 사용하여 팔로워 관계를 설정합니다.
+     * 이 관계는 `user_follow`라는 중간 테이블을 통해 관리되며,
+     * 중간 테이블에서 `user_id`는 현재 사용자를 가리키고,
+     * `follower_id`는 팔로우하는 사용자를 가리킵니다.
+     */
+    @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)
+    private List<User> following = new ArrayList<>();
+    /**
+     * 사용자가 팔로우하는 다른 사용자들.
+     *
+     * `followers` 필드에 의해 매핑된 반대 방향의 Many-to-Many 관계입니다.
+     * 이 필드는 현재 사용자가 팔로우하고 있는 다른 사용자들을 나타냅니다.
+     * `mappedBy = "followers"` 설정을 통해 반대 관계임을 지정합니다.
+     */
 }

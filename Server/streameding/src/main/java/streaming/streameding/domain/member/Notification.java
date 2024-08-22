@@ -1,10 +1,9 @@
-package streaming.streameding.domain.community;
+package streaming.streameding.domain.member;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import streaming.streameding.domain.member.User;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +16,7 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notification_id")
     private Long id;
 
     @ManyToOne

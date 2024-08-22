@@ -4,9 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import streaming.streameding.domain.community.Comment;
+import streaming.streameding.domain.community.Like;
 import streaming.streameding.domain.member.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "contents")
@@ -19,6 +23,7 @@ public abstract class Content {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "content_id")
     private Long id;
 
     @ManyToOne
@@ -35,4 +40,10 @@ public abstract class Content {
     private LocalDateTime uploadDate;
 
     private String mediaUrl;
+
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
 }
