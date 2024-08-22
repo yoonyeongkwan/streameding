@@ -57,4 +57,12 @@ public class User {
      * 이 필드는 현재 사용자가 팔로우하고 있는 다른 사용자들을 나타냅니다.
      * `mappedBy = "followers"` 설정을 통해 반대 관계임을 지정합니다.
      */
+
+    // 생성메소드
+
+    public User(String email, String password, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+    }
 }
